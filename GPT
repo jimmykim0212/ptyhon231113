@@ -1,0 +1,49 @@
+class Person:
+    def __init__(self, id, title):
+        self.id = id
+        self.title = title
+
+    def printInfo(self):
+        print("ID: {0}, Title: {1}".format(self.id, self.title))
+
+
+class Manager(Person):
+    def __init__(self, id, title, skill):
+        super().__init__(id, title)
+        self.skill = skill
+
+
+class Employee(Person):
+    def __init__(self, id, title, role):
+        super().__init__(id, title)
+        self.role = role
+
+
+# 테스트 코드
+# Person 객체 생성 및 printInfo() 호출
+person1 = Person(1, "Person Title 1")
+person1.printInfo()
+
+person2 = Person(2, "Person Title 2")
+person2.printInfo()
+
+# Manager 객체 생성, printInfo() 호출
+manager = Manager(3, "Manager Title", "Leadership")
+manager.printInfo()
+print("Manager Skill:", manager.skill)
+
+# Employee 객체 생성, printInfo() 호출
+employee = Employee(4, "Employee Title", "Developer")
+employee.printInfo()
+print("Employee Role:", employee.role)
+
+# 추가적인 테스트
+manager2 = Manager(5, "Another Manager", "Communication")
+manager2.printInfo()
+print("Manager 2 Skill:", manager2.skill)
+
+employee2 = Employee(6, "Another Employee", "Designer")
+employee2.printInfo()
+print("Employee 2 Role:", employee2.role)
+
+# 여러 객체를 생성하여 다양한 경우에 대해 확인할 수 있음

@@ -1,0 +1,37 @@
+import requests
+from bs4 import BeautifulSoup
+from openpyxl import Workbook
+
+def crawl_naver_blog(search_keyword):
+    wb = Workbook()  # 새 Excel 워크북 생성
+    ws = wb.active  # 활성화된 시트 가져오기
+    ws.append(["페이지", "블로그 주소", "블로그명", "글의 제목", "포스팅 날짜"])  # 헤더 행 추가
+
+    for page in range(1, 101):  # 1페이지부터 100페이지까지 순회합니다.
+        url = f"https://search.naver.com/search.naver?where=view&sm=tab_jum&query={search_keyword}&start={page * 10}"
+
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'html.parser')
+            #blog_elements = soup.select('li.bx._svp_item')
+            blog_elements = soup.find_all('li', {'class':'bx'})
+
+            for element in blog_elements:
+                blog_url = element.select_one('a.api_txt_lines.total_tit')['href']
+                blog_name = element.select_one('a.sub_txt.sub_name').text
+                title = element.select_one('a.api_txt_lines.total_tit').text
+                date = element.select_one('span.sub_time.sub_txt').text
+
+                ws.append([page, blog_url, blog_name, title, date])  # 각 항목을 엑셀 시트에 추가
+
+        else:
+            print(f"페이지 {page}를 불러오지 못했습니다.")
+
+    # 엑셀 파일로 저장
+    wb.save('d:\\work\\blog.xlsx')
+    print("엑셀 파일이 생성되었습니다.")
+
+# 검색어 입력 및 크롤링 실행
+search_keyword = "아이폰15"
+crawl_naver_blog(search_keyword)
